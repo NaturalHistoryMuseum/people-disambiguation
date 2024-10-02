@@ -1,0 +1,562 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2639
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c100000\c100000\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww25840\viewh16080\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs28 \cf0 indexer = recordlinkage.Index()\
+indexer.block('lastName')# indexer.sortedneighbourhood indexer.full()\
+candidate_links = indexer.index(dfa, dfb)\
+compare_cl = recordlinkage.Compare()\
+# method options: \'91jaro\'92, \'92jarowinkler\'92, \'91levenshtein\'92, \'91damerau_levenshtein\'92, \'91qgram\'92 or \'91cosine\'92.\
+compare_cl.string('firstName', 'firstName', method='jarowinkler', threshold=0.85, label='firstName')\
+compare_cl.exact('dateOfBirth', 'birthYear', label='dateOfBirth')\
+compare_cl.exact('dateOfDeath', 'deathYear', label='dateOfDeath')\
+compare_cl.string('authorAbbrv', 'B & P Author Abbrev.', method='jarowinkler', threshold=0.85, label='authorAbbrv')\
+compare_cl.string('countryOfCitizenshipISO', 'geographyISO', method='jarowinkler', threshold=0.85, label='geographyISO')\
+# compare_cl.add(CompareAliases('label', 'Name', threshold=0.85, label='sim'))\
+\
+features = compare_cl.compute(candidate_links, dfa, dfb)\
+features.sum(axis=1).value_counts().sort_index(ascending=False)\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# \cb1 \kerning1\expnd0\expndtw0 jarowinkler\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+# Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 16052  14970]\
+ [  3192 750606]]\
+Precision: 0.8341301184784868\
+Recall: 0.5174392366707498\
+Accuracy: 0.9768583879106038\
+F-Measure: 0.6386822106393983\
+\
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  6210    596]\
+ [  2663 186736]]\
+Precision: 0.6998760284007663\
+Recall: 0.9124302086394358\
+Accuracy: 0.9833898218699829\
+F-Measure: 0.7921423560176031\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  6164    642]\
+ [  2619 186780]]\
+Precision: 0.7018103153819879\
+Recall: 0.9056714663532177\
+Accuracy: 0.9833796284498356\
+F-Measure: 0.7908140355378792\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  5699   1103]\
+ [  2262 187141]]\
+Precision: 0.7158648411003643\
+Recall: 0.8378418112319906\
+Accuracy: 0.9828495706021763\
+F-Measure: 0.7720652983810878\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  3953   2849]\
+ [   759 188644]]\
+Precision: 0.8389219015280136\
+Recall: 0.5811526021758306\
+Accuracy: 0.9816110700542799\
+F-Measure: 0.6866423484453709\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  6190    612]\
+ [  2680 186723]]\
+Precision: 0.6978579481397971\
+Recall: 0.9100264628050574\
+Accuracy: 0.9832216304375525\
+F-Measure: 0.7899438489025014\
+\
+# \cb1 \kerning1\expnd0\expndtw0 levenshtein\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 # Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 14692  16330]\
+ [  2071 751727]]\
+Precision: 0.8764540953289984\
+Recall: 0.4735993810843917\
+Accuracy: 0.9765538594837033\
+F-Measure: 0.6149210003139061\cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  5534   1246]\
+ [  1225 188200]]\
+Precision: 0.8187601716230212\
+Recall: 0.8162241887905605\
+Accuracy: 0.9874060294080171\
+F-Measure: 0.8174902134574193\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  5533   1247]\
+ [  1215 188210]]\
+Precision: 0.8199466508595139\
+Recall: 0.8160766961651917\
+Accuracy: 0.98745189979868\
+F-Measure: 0.8180070963926671\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  5128   1695]\
+ [   894 188488]]\
+Precision: 0.8515443374294255\
+Recall: 0.7515755532756851\
+Accuracy: 0.9868046176193267\
+F-Measure: 0.7984429739198132\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  5021   1802]\
+ [   814 188568]]\
+Precision: 0.8604970008568981\
+Recall: 0.7358933020665397\
+Accuracy: 0.9866670064473383\
+F-Measure: 0.7933322799810397\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  5613   1210]\
+ [  1260 188122]]\
+Precision: 0.8166739415102575\
+Recall: 0.8226586545507841\
+Accuracy: 0.9874111261180908\
+F-Measure: 0.8196553738317758\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # \cb2 \expnd0\expndtw0\kerning0
+damerau_levenshtein\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 14706  16316]\
+ [  2074 751724]]\
+Precision: 0.8764004767580453\
+Recall: 0.47405067371542775\
+Accuracy: 0.9765678754364058\
+F-Measure: 0.6152880632609514\cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  5641   1244]\
+ [  1214 188106]]\
+Precision: 0.8229029905178702\
+Recall: 0.8193173565722586\
+Accuracy: 0.9874722866389746\
+F-Measure: 0.8211062590975255\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  5638   1247]\
+ [  1205 188115]]\
+Precision: 0.8239076428467047\
+Recall: 0.818881626724764\
+Accuracy: 0.9875028668994165\
+F-Measure: 0.8213869463869463\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  5014   1670]\
+ [   857 188664]]\
+Precision: 0.8540282745699199\
+Recall: 0.7501496110113705\
+Accuracy: 0.9871206136438929\
+F-Measure: 0.7987256073277579\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  4920   1764]\
+ [   770 188751]]\
+Precision: 0.8646748681898067\
+Recall: 0.7360861759425493\
+Accuracy: 0.9870849366733774\
+F-Measure: 0.7952157750121222\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  5469   1215]\
+ [  1205 188316]]\
+Precision: 0.8194486065328139\
+Recall: 0.8182226211849192\
+Accuracy: 0.9876659616217731\
+F-Measure: 0.8188351549633178\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 \
+# \cb2 \expnd0\expndtw0\kerning0
+last, first, abbrv, dob\cb1 \kerning1\expnd0\expndtw0 \
+\
+# Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 15056  15966]\
+ [  2208 970782]]\
+Precision: 0.8721037998146431\
+Recall: 0.48533298949132875\
+Accuracy: 0.9818986227256248\
+F-Measure: 0.6236176117301081\cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  5652   1231]\
+ [  1317 242803]]\
+Precision: 0.8110202324580285\
+Recall: 0.8211535667586808\
+Accuracy: 0.9898487269076465\
+F-Measure: 0.8160554432572914\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  5649   1234]\
+ [  1298 242822]]\
+Precision: 0.8131567583129409\
+Recall: 0.8207177103007409\
+Accuracy: 0.9899124711656833\
+F-Measure: 0.8169197396963125\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  5266   1766]\
+ [   934 243037]]\
+Precision: 0.8493548387096774\
+Recall: 0.7488623435722411\
+Accuracy: 0.9892431564562973\
+F-Measure: 0.7959492140266022\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  5163   1869]\
+ [   841 243130]]\
+Precision: 0.8599267155229847\
+Recall: 0.7342150170648464\
+Accuracy: 0.9892033162950243\
+F-Measure: 0.7921141454433875\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  5765   1267]\
+ [  1341 242630]]\
+Precision: 0.8112862369828314\
+Recall: 0.8198236632536974\
+Accuracy: 0.9896096859400086\
+F-Measure: 0.8155326071580139\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 14002  17020]\
+ [  1713 971277]]\
+Precision: 0.8909958638243716\
+Recall: 0.4513571014119012\
+Accuracy: 0.981341856471835\
+F-Measure: 0.5991826604189401\cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  5767   1244]\
+ [  1292 242700]]\
+Precision: 0.816971242385607\
+Recall: 0.822564541434888\
+Accuracy: 0.989896535101174\
+F-Measure: 0.8197583511016346\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  5767   1244]\
+ [  1292 242700]]\
+Precision: 0.816971242385607\
+Recall: 0.822564541434888\
+Accuracy: 0.989896535101174\
+F-Measure: 0.8197583511016346\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  5202   1809]\
+ [   820 243172]]\
+Precision: 0.8638326137495849\
+Recall: 0.7419768934531451\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.798281285966393\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  5202   1809]\
+ [   820 243172]]\
+Precision: 0.8638326137495849\
+Recall: 0.7419768934531451\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.798281285966393\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  5767   1244]\
+ [  1292 242700]]\
+Precision: 0.816971242385607\
+Recall: 0.822564541434888\
+Accuracy: 0.989896535101174\
+F-Measure: 0.8197583511016346\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 22009   9013]\
+ [  4776 968214]]\
+Precision: 0.8216912450998693\
+Recall: 0.7094642511765844\
+Accuracy: 0.9862661004051745\
+F-Measure: 0.7614648744961684\cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  5585   1426]\
+ [  1203 242789]]\
+Precision: 0.822775486152033\
+Recall: 0.7966053344743974\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.8094789477498369\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  5585   1426]\
+ [  1203 242789]]\
+Precision: 0.822775486152033\
+Recall: 0.7966053344743974\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.8094789477498369\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  5585   1426]\
+ [  1203 242789]]\
+Precision: 0.822775486152033\
+Recall: 0.7966053344743974\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.8094789477498369\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  5585   1426]\
+ [  1203 242789]]\
+Precision: 0.822775486152033\
+Recall: 0.7966053344743974\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.8094789477498369\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  5585   1426]\
+ [  1203 242789]]\
+Precision: 0.822775486152033\
+Recall: 0.7966053344743974\
+Accuracy: 0.9895260216013354\
+F-Measure: 0.8094789477498369\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # \cb2 \expnd0\expndtw0\kerning0
+last, first, dob\
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+Confusion Matrix:\
+ [[ 14538  16484]\
+ [  2995 969995]]\
+Precision: 0.8291792619631552\
+Recall: 0.4686351621429953\
+Accuracy: 0.980598837464094\
+F-Measure: 0.5988260735248687\cb1 \kerning1\expnd0\expndtw0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+\
+Confusion Matrix:\
+ [[  3732   3279]\
+ [   769 243223]]\
+Precision: 0.8291490779826706\
+Recall: 0.5323063756953359\
+Accuracy: 0.9838727027167006\
+F-Measure: 0.6483669214732453\
+\
+# K-means Classifier\
+\
+Confusion Matrix:\
+ [[  3732   3279]\
+ [   769 243223]]\
+Precision: 0.8291490779826706\
+Recall: 0.5323063756953359\
+Accuracy: 0.9838727027167006\
+F-Measure: 0.6483669214732453\
+\
+# Logistic Regression\
+\
+Confusion Matrix:\
+ [[  3732   3279]\
+ [   769 243223]]\
+Precision: 0.8291490779826706\
+Recall: 0.5323063756953359\
+Accuracy: 0.9838727027167006\
+F-Measure: 0.6483669214732453\
+\
+# Support Vector Machine Classifier\
+\
+Confusion Matrix:\
+ [[  3732   3279]\
+ [   769 243223]]\
+Precision: 0.8291490779826706\
+Recall: 0.5323063756953359\
+Accuracy: 0.9838727027167006\
+F-Measure: 0.6483669214732453\
+\
+# Naive Bayes Classifier\
+\
+Confusion Matrix:\
+ [[  3732   3279]\
+ [   769 243223]]\
+Precision: 0.8291490779826706\
+Recall: 0.5323063756953359\
+Accuracy: 0.9838727027167006\
+F-Measure: 0.6483669214732453\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+# K-means Classifier\
+# Logistic Regression\
+# Support Vector Machine Classifier\
+# Naive Bayes Classifier\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+# K-means Classifier\
+# Logistic Regression\
+# Support Vector Machine Classifier\
+# Naive Bayes Classifier\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+# K-means Classifier\
+# Logistic Regression\
+# Support Vector Machine Classifier\
+# Naive Bayes Classifier\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+# K-means Classifier\
+# Logistic Regression\
+# Support Vector Machine Classifier\
+# Naive Bayes Classifier\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+# K-means Classifier\
+# Logistic Regression\
+# Support Vector Machine Classifier\
+# Naive Bayes Classifier\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \cb1 \kerning1\expnd0\expndtw0 # Threshold-based methods\
+\pard\pardeftab720\partightenfactor0
+\cf0 \cb2 \expnd0\expndtw0\kerning0
+# Expectation/Conditional Maxisation Classifier\
+# K-means Classifier\
+# Logistic Regression\
+# Support Vector Machine Classifier\
+# Naive Bayes Classifier}

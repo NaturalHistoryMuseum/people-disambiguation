@@ -22,50 +22,7 @@ requests_cache.install_cache(CACHE_DIR / 'harvard')
 
 
 class HarvardIndexSearchTask(BaseTask):
-    '''
-    url = 'https://kiki.huh.harvard.edu/databases/botanist_search.php'
-    
-    def _search(self, params):
-        default_params = {'start': 1, 'name': None, 'id': None, 'remarks': None, 'specilaity': None, 'country': None}        
-        params.update(default_params)
-        collected_ids = set()
-        start = 1  # Initial page
-        
-        while True:
-            params['start'] = start
-            r = requests.get(self.url, params=params)          
-            logger.info('Using cached search: %s', r.from_cache)         
-            soup = BeautifulSoup(r.text, 'lxml')
-            inputs = soup.find_all('input', {'name': 'id[]'})
-            
-            if not inputs:
-                break  # Exit loop when no more results
-            
-            for i in inputs:
-                collected_ids.add(i['value'])
-            
-            logger.info(f'Page {start} processed. Found {len(inputs)} entries.')
-            start += 1  # Move to the next page
-        
-        return collected_ids
-        
-    def _search_individuals(self):            
-        return self._search({'individual': 'on'})
 
-    def _search_collectors(self):            
-        return self._search({'is_collector': 'on'})
-            
-    def run(self):
-        logger.info(f'Parsing Harvard Index of individuals')         
-        individuals = set(self._search_individuals()) 
-        logger.info(f'%s individuals retrieved from Harvard Index', len(individuals)) 
-        logger.info(f'Parsing Harvard Index of collectors')         
-        collectors = set(self._search_collectors()) 
-        logger.info(f'%s collectors retrieved from Harvard Index', len(collectors))
-        collector_ids = individuals | collectors
-        with self.output().open('w') as f:                  
-            f.write(yaml.dump(list(collector_ids),  default_flow_style=False))         
-    '''  
     url = 'https://huh-it.s3.amazonaws.com/huh-agents.tab.txt'
     def _search(self):
         # Read the tab-separated file

@@ -17,6 +17,7 @@ from pkb.tasks.wikidata import WikiDataCollectorsTask
 from pkb.tasks.bionomia import BionomiaCollectorsTask
 
 from Levenshtein import ratio
+from neo4j import GraphDatabase
 
 tqdm.pandas()
 
@@ -1006,10 +1007,118 @@ class CollectorsTask(BaseTask):
         final_merged_df = pd.concat([merged_df, wh_merged, wb_merged, hb_merged], ignore_index=True)
         final_merged_df.to_csv(self.output().path, index=False)
         
-
     def output(self): 
         return luigi.LocalTarget(OUTPUT_DIR / 'collectors.csv')    
+
+class CollectorstToNeo4jTask(BaseTask):
     
+    def requires(self):
+        return [
+            CollectorstTask()
+        ]
+        
+    @staticmethod    
+    def add_data_to_neo4j(tx, row):
+    # defining graph nodes' properties
+    query = """
+    CREATE (c:Collector {
+        firstName_h: $firstName_h,
+        authorAbbrv_h: $authorAbbrv_h,
+        harvardIndex_w: $harvardIndex_w,
+        dateOfDeath_w: $dateOfDeath_w,
+        bioID: $bioID,
+        firstName_w: $firstName_w,
+        wikiID: $wikiID,
+        dateOfBirth_w: $dateOfBirth_w,
+        lastName_b: $lastName_b,
+        firstName_b: $firstName_b,
+        lastName_h: $lastName_h,
+        dateOfDeath_b: $dateOfDeath_b,
+        harvardIndex: $harvardIndex,
+        orgs_b: $orgs_b,
+        acceptedNames_b: $acceptedNames_b,
+        name_w: $name_w,
+        geographyISO_h: $geographyISO_h,
+        authorAbbrv_w: $authorAbbrv_w,
+        author_note_h: $author_note_h,
+        lastName_w: $lastName_w,
+        label_b: $label_b,
+        countries_b: $countries_b,
+        bionomia_w: $bionomia_w,
+        dateOfBirth_b: $dateOfBirth_b,
+        dateOfBirth_h: $dateOfBirth_h,
+        herbariaCode_h: $herbariaCode_h,
+        birthYearIsApprox_h: $birthYearIsApprox_h,
+        middleName_h: $middleName_h,
+        Name_h: $Name_h,
+        fullname_b: $fullname_b,
+        label_h: $label_h,
+        countries_w: $countries_w,
+        wikidata_b: $wikidata_b,
+        orcid_b: $orcid_b,
+        harvardIndex_w_wh: $harvardIndex_w_wh,
+        aliases_w: $aliases_w,
+        dateOfDeath_h: $dateOfDeath_h,
+        harvardIndex_w_merged: $harvardIndex_w_merged
+    })
+    """
+    # check and add
+    tx.run(query, 
+           firstName_h=row['firstName_h'],
+           authorAbbrv_h=row['authorAbbrv_h'],
+           harvardIndex_w=row['harvardIndex_w'],
+           dateOfDeath_w=row['dateOfDeath_w'],
+           bioID=row['bioID'],
+           firstName_w=row['firstName_w'],
+           wikiID=row['wikiID'],
+           dateOfBirth_w=row['dateOfBirth_w'],
+           lastName_b=row['lastName_b'],
+           firstName_b=row['firstName_b'],
+           lastName_h=row['lastName_h'],
+           dateOfDeath_b=row['dateOfDeath_b'],
+           harvardIndex=row['harvardIndex'],
+           orgs_b=row['orgs_b'],
+           acceptedNames_b=row['acceptedNames_b'],
+           name_w=row['name_w'],
+           geographyISO_h=row['geographyISO_h'],
+           authorAbbrv_w=row['authorAbbrv_w'],
+           author_note_h=row['author note_h'],
+           lastName_w=row['lastName_w'],
+           label_b=row['label_b'],
+           countries_b=row['countries_b'],
+           bionomia_w=row['bionomia_w'],
+           dateOfBirth_b=row['dateOfBirth_b'],
+           dateOfBirth_h=row['dateOfBirth_h'],
+           herbariaCode_h=row['herbariaCode_h'],
+           birthYearIsApprox_h=row['birthYearIsApprox_h'],
+           middleName_h=row['middleName_h'],
+           Name_h=row['Name_h'],
+           fullname_b=row['fullname_b'],
+           label_h=row['label_h'],
+           countries_w=row['countries_w'],
+           wikidata_b=row['wikidata_b'],
+           orcid_b=row['orcid_b'],
+           harvardIndex_w_wh=row['harvardIndex_w_wh'],
+           aliases_w=row['aliases_w'],
+           dateOfDeath_h=row['dateOfDeath_h'],
+           harvardIndex_w_merged=row['harvardIndex_w_merged']
+          )
+    
+    def run(self):
+        uri = "bolt://localhost:7687"  # change to the working host
+        user = "neo4j"  # neo4j db username
+        password = "your_password"  # password
+        driver = GraphDatabase.driver(uri, auth=(user, password))
+
+        df = pd.read_csv(self.input()[0].path,chunksize=10000,encoding='utf-8',on_bad_lines='skip',engine='python')
+        df = pd.concat(df)
+        
+        with driver.session() as session:
+            for index, row in df.iterrows():
+                session.write_transaction(add_data_to_neo4j, row)
+                
+        driver.close()
+
     
 if __name__ == "__main__":
     # luigi.build([ProcessSpecimenTask(image_id='011244568', force=True)], local_scheduler=True)
